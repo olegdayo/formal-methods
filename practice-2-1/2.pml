@@ -81,7 +81,7 @@ proctype third() {
 }
 
 init {
-    // run zero();
-    // run first();
+    run zero();
+    run first();
     run second();
 }
