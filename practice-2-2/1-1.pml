@@ -30,4 +30,4 @@ init {
     run Receiver();
 }
 
-ltl reachedZ { <> got_z}
+ltl reached_z { <> got_z}
