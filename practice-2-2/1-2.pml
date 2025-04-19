@@ -14,12 +14,12 @@ proctype Receiver() {
     byte c;
 
     do
-    :: ch ? c ->
-        printf("%c\n", c);
-        if
-        :: c == 'z' -> got_z = true; break;
-        :: else -> skip;
-        fi
+        :: ch ? c ->
+            printf("%c\n", c);
+            if
+                :: c == 'z' -> got_z = true; break;
+                :: else -> skip;
+            fi
     od
 
     assert(got_z);
