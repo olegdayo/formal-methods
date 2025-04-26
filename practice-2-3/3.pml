@@ -18,8 +18,7 @@ inline command(i) {
     steps++
 }
 
-active proctype Commander()
-{
+active proctype Commander() {
     do
     :: atomic {
          byte i;
@@ -30,6 +29,7 @@ active proctype Commander()
             :: i = 3
             :: i = 4
          fi;
+         printf("CMD: %d\n", i);
          command(i)
        }
     od
