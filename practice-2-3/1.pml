@@ -1,35 +1,52 @@
-byte to_be_or_not_to_be[26] = {'t', 'o', 'b', 'e', 'o', 'r', 'n', 'o', 't', 't', 'o', 'b', 'e'};
+#define TARGET_LEN 13
 
-chan ch = [0] of {byte};
+bool matched = false;
+byte pos;
+chan ch = [0] of { byte }; 
 
-bool got_to_be = false;
+byte target[TARGET_LEN] = {'t', 'o', 'b', 'e', 'o', 'r', 'n', 'o', 't', 't', 'o', 'b', 'e'};
 
 proctype Monkey(byte c) {
     do
-        :: got_to_be -> break;
-        :: else -> ch ! c;
+        :: matched        -> break;
+        :: !matched       -> ch ! c;
     od
 }
 
 proctype Reviewer() {
-    byte c;
-
+    byte received;
+    pos = 0;
     do
-        :: ch ? c ->
-            printf("%c\n", c);
+        :: ch ? received -> 
             if
-                :: c == 'z' -> got_to_be = true; break;
-                :: else -> skip;
+                :: received == target[pos] -> 
+                    pos++;
+                    if
+                        :: pos == TARGET_LEN -> 
+                            matched = true;
+                            break
+                        :: else -> skip
+                    fi
+                :: else ->
+                    pos = 0;
+                    if
+                        :: received == target[0] -> pos = 1
+                        :: else -> skip
+                    fi
             fi
     od
 }
 
 init {
-    byte c;
-    for (c : 'a'..'z') {
-        run Monkey(c);
+    atomic {
+        byte c;
+
+        for (c: 'a'..'z') {
+            run Monkey(c)
+        }
+
+        run Reviewer();
     }
-    run Reviewer();
 }
 
-ltl to_be { got_to_be };
+ltl to_be { []! matched }
