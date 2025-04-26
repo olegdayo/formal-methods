@@ -1,10 +1,9 @@
-#define TARGET_LEN 13
+#define L 13
+byte target[L] = {'t', 'o', 'b', 'e', 'o', 'r', 'n', 'o', 't', 't', 'o', 'b', 'e'};
 
 bool matched = false;
 byte pos;
 chan ch = [0] of { byte }; 
-
-byte target[TARGET_LEN] = {'t', 'o', 'b', 'e', 'o', 'r', 'n', 'o', 't', 't', 'o', 'b', 'e'};
 
 proctype Monkey(byte c) {
     do
@@ -14,15 +13,17 @@ proctype Monkey(byte c) {
 }
 
 proctype Reviewer() {
-    byte received;
+    byte recv;
     pos = 0;
+
     do
-        :: ch ? received -> 
+        :: ch ? recv -> 
+            printf("Received: %c\n", recv);
             if
-                :: received == target[pos] -> 
+                :: recv == target[pos] -> 
                     pos++;
                     if
-                        :: pos == TARGET_LEN -> 
+                        :: pos == L -> 
                             matched = true;
                             break
                         :: else -> skip
@@ -30,7 +31,7 @@ proctype Reviewer() {
                 :: else ->
                     pos = 0;
                     if
-                        :: received == target[0] -> pos = 1
+                        :: recv == target[0] -> pos = 1
                         :: else -> skip
                     fi
             fi
@@ -42,11 +43,11 @@ init {
         byte c;
 
         for (c: 'a'..'z') {
-            run Monkey(c)
+            run Monkey(c);
         }
 
         run Reviewer();
     }
 }
 
-ltl to_be { []! matched }
+ltl to_be { [] (matched == false) }
