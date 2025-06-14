@@ -2,6 +2,8 @@
 
 By Oleg Sidorenkov
 
+More stuff, including code and trail logs can be found in my [repo](https://github.com/olegdayo/formal-methods/blob/master/homework)!
+
 Option №7
 
 ![task](https://github.com/olegdayo/formal-methods/blob/master/homework/task.png?raw=true)
@@ -20,7 +22,60 @@ In order to do so, we will need to prove the following features:
 
 ### Generator
 
+```pml
+proctype TrafficGenerator(){
+    do
+        :: SN_light ! 1
+        :: WN_light ! 1
+        :: EW_light ! 1
+        :: ES_light ! 1
+        :: NE_light ! 1
+        :: P_light ! 1
+    od
+}
+```
+
+Sends a signal from cars and pedestrians in traffic to sensor
+
+### Parallel processes
+
+```pml
+init {
+    /* 1: SN conflicts: EW(3), ES(4), NE(5) */
+    run TrafficLight(1, 2, 3, 4, 5, 0, 0, SN_light);
+
+    /* 2: WN conflicts: EW(3), NE(5) */
+    run TrafficLight(2, 3, 3, 5, 0, 0, 0, WN_light);
+
+    /* 3: EW conflicts: SN(1), WN(2), NE(5), P(6) */
+    run TrafficLight(3, 4, 1, 2, 5, 6, 0, EW_light);
+
+    /* 4: ES conflicts: P(6), SN(1), NE(5) */
+    run TrafficLight(4, 5, 6, 1, 5, 0, 0, ES_light);
+
+    /* 5: NE conflicts: EW(3), WN(2), ES(4), SN(1), P(6) */
+    run TrafficLight(5, 6, 3, 2, 4, 1, 6, NE_light);
+
+    /* 6: P conflicts: EW(3), ES(4), NE(5) */
+    run TrafficLight(6, 1, 3, 4, 5, 0, 0, P_light);
+
+    run TrafficGenerator();
+}
+```
+
+Apart from generator, processes imitating each traffic light, are started
+
 ### EventLoop
+
+Each process waits for global pointer to point to it
+
+Global pointer is a simple round-robins alogrithm: 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, etc...
+
+When traffic light is active, it checks if there is any traffic, and if there is, it sets a flag that it needs green
+
+The loop also includes somehting like a race with priority for the mutex
+
+Process with most priority gains green
 
 ## Results
 
