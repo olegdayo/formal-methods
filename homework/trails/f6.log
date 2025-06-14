@@ -1,0 +1,74 @@
+pan: ltl formula f6
+Depth=  345523 States=    1e+06 Transitions= 5.37e+06 Memory=   335.507	t=      2.4 R=   4e+05
+Depth=  381587 States=    2e+06 Transitions= 1.26e+07 Memory=   568.125	t=     6.37 R=   3e+05
+Depth=  381587 States=    3e+06 Transitions= 1.88e+07 Memory=   783.359	t=     9.34 R=   3e+05
+Depth=  381587 States=    4e+06 Transitions= 2.56e+07 Memory=   985.410	t=     12.5 R=   3e+05
+Depth=  381587 States=    5e+06 Transitions= 3.23e+07 Memory=  1189.316	t=     15.8 R=   3e+05
+
+(Spin Version 6.5.0 -- 1 July 2019)
+	+ Partial Order Reduction
+
+Full statespace search for:
+	never claim         	+ (f6)
+	assertion violations	+ (if within scope of claim)
+	acceptance   cycles 	+ (fairness disabled)
+	invalid end states	- (disabled by never claim)
+
+State-vector 268 byte, depth reached 381587, errors: 0
+  5003078 states, stored (5.7513e+06 visited)
+ 30748014 states, matched
+ 36499312 transitions (= visited+matched)
+        0 atomic steps
+hash conflicts:   3315419 (resolved)
+
+Stats on memory usage (in Megabytes):
+ 1412.307	equivalent memory usage for states (stored*(State-vector + overhead))
+ 1188.693	actual memory usage for states (compression: 84.17%)
+         	state-vector as stored = 221 byte + 28 byte overhead
+  128.000	memory used for hash table (-w24)
+   53.406	memory used for DFS stack (-m1000000)
+    2.658	memory lost to fragmentation
+ 1367.441	total actual memory usage
+
+
+unreached in proctype TrafficLight
+	system.pml:52, state 14, "statuses[(curr-1)] = 1"
+	system.pml:53, state 15, "queue[(curr-1)] = 0"
+	system.pml:54, state 16, "currentTurn = next"
+	system.pml:59, state 21, "firsthirdValue = 0"
+	system.pml:63, state 27, "secondValue = 0"
+	system.pml:104, state 77, "-end-"
+	(6 of 77 states)
+unreached in proctype TrafficGenerator
+	system.pml:115, state 10, "-end-"
+	(1 of 10 states)
+unreached in init
+	(0 of 8 states)
+unreached in claim f6
+	_spin_nvr.tmp:185, state 13, "-end-"
+	(1 of 13 states)
+
+pan: elapsed time 18.2 seconds
+pan: rate 316353.03 states/second
+ltl s1: [] (! ((statuses[0]) && (((statuses[2]) || (statuses[3])) || (statuses[4]))))
+ltl s2: [] (! ((statuses[1]) && ((statuses[2]) || (statuses[4]))))
+ltl s3: [] (! ((statuses[2]) && ((((statuses[0]) || (statuses[1])) || (statuses[4])) || (statuses[5]))))
+ltl s4: [] (! ((statuses[3]) && (((statuses[5]) || (statuses[0])) || (statuses[4]))))
+ltl s5: [] (! ((statuses[4]) && (((((statuses[2]) || (statuses[1])) || (statuses[3])) || (statuses[0])) || (statuses[5]))))
+ltl s6: [] (! ((statuses[5]) && (((statuses[2]) || (statuses[3])) || (statuses[4]))))
+ltl l1: [] ((! (((queue[0]==1)) && (! (statuses[0])))) || (<> (statuses[0])))
+ltl l2: [] ((! (((queue[1]==1)) && (! (statuses[1])))) || (<> (statuses[1])))
+ltl l3: [] ((! (((queue[2]==1)) && (! (statuses[2])))) || (<> (statuses[2])))
+ltl l4: [] ((! (((queue[3]==1)) && (! (statuses[3])))) || (<> (statuses[3])))
+ltl l5: [] ((! (((queue[4]==1)) && (! (statuses[4])))) || (<> (statuses[4])))
+ltl l6: [] ((! (((queue[5]==1)) && (! (statuses[5])))) || (<> (statuses[5])))
+ltl f1: [] (<> (! (statuses[0])))
+ltl f2: [] (<> (! (statuses[1])))
+ltl f3: [] (<> (! (statuses[2])))
+ltl f4: [] (<> (! (statuses[3])))
+ltl f5: [] (<> (! (statuses[4])))
+ltl f6: [] (<> (! (statuses[5])))
+  the model contains 18 never claims: f6, f5, f4, f3, f2, f1, l6, l5, l4, l3, l2, l1, s6, s5, s4, s3, s2, s1
+  only one claim is used in a verification run
+  choose which one with ./pan -a -N name (defaults to -N s1)
+  or use e.g.: spin -search -ltl s1 system.pml
