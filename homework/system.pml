@@ -8,8 +8,8 @@ chan P_light = [1] of {byte};
 byte n = 10;
 
 byte currentTurn = 1;
-byte queue [6]  = {0,0,0,0,0,0};
-short requests [7]  = {0,0,0,0,0,0};
+byte queue [6]  = {0, 0, 0, 0, 0, 0};
+short requests [7]  = {0, 0, 0, 0, 0, 0};
 bool statuses [6]  = {false, false, false, false, false, false};
 
 proctype TrafficLight (byte number; byte nextNum; byte fProblem; byte sProblem; byte tProblem; byte uProblem; byte oProblem; chan tlChan){
